@@ -6,16 +6,111 @@
     <meta name="viewport" content="width=divce-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Cmpatible" content="ie=edge">
     <title>Vue for tic-tac-toe</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="node_modules/vue/dist/vue.global.js" charset="utf-8"></script>
+    <style>
+        .GameTitle {
+            display: inline-flex;
+            width: 100%;
+        }
+
+        #tbGameTitle {
+            margin: 0% auto;
+        }
+
+        #tbGameTitle td {
+            display: inline-flex;
+        }
+
+        #tbGameTitle td div {
+            width: 25px;
+            height: 25px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Let's play the Tic-tac-toe game.</h1>
-    
+    <div class="px-4 my-5 text-center">
+        <div style="display: inline-flex">
+            <img class="d-block mx-auto mb-4"
+                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/tic-tac-toe-1424849-1204411.png" alt=""
+                width="70">
+            <h1 class="display-5 fw-bold">Let's play the Tic-tac-toe game.</h1>
+        </div>
+        <div class="col-lg-6 mx-auto">
+            <p class="lead mb-4">This is built width Vue3 JS.</p>
+            <div id="ttt" style="background-color:cadetblue;">
+                <div class="GameTitle">
+                    <table id="tbGameTitle">
+                        <tr>
+                            <td>You are:
+                                <div>
+                                    <svg aria-label="X" role="img" viewBox="0 0 128 128">
+                                        <path class="hFJ9Ve" d="M16,16L112,112"
+                                            style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
+                                        </path>
+                                        <path class="hFJ9Ve" d="M112,16L16,112"
+                                            style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;stroke-width: 16px;">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </td>
+                            <td>Opponent:
+                                <div>
+                                    <svg aria-label="O" role="img" viewBox="0 0 128 128">
+                                        <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
+                                            style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
+                                        </path>
+                                    </svg>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="display:inline-flex;">輪到
+                    <div></div>了
+                </div>
+                <div>
+                    <table>
+                        <tr v-for="row in RowCount">
+                            <td><svg aria-label="X" role="img" viewBox="0 0 128 128" >
+                                    <path class="hFJ9Ve" d="M16,16L112,112"
+                                        style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
+                                    </path>
+                                    <path class="hFJ9Ve" d="M112,16L16,112"
+                                        style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;stroke-width: 16px;">
+                                    </path>
+                                </svg>
+                                <svg aria-label="O" role="img" viewBox="0 0 128 128" style="display:none;">
+                                    <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
+                                        style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
+                                    </path>
+                                </svg>
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
 <script type="text/javascript">
-
+    const obj = Vue.createApp({
+        data() {
+            return {
+                pty: {
+                    dtArray: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+                }
+            }
+        },
+        computed: {
+            RowCount() { return this.pty.dtArray.length }
+        }
+    }).mount('#ttt')
 
 </script>
