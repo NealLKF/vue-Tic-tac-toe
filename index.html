@@ -10,9 +10,40 @@
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="node_modules/vue/dist/vue.global.js" charset="utf-8"></script>
     <style>
-        .GameTitle {
+        .pieces {
+            width: 25px;
+            height: 25px;
+        }
+
+        .XAM5jb path {
+            stroke: darkgreen;
+            stroke-width: 6px;
+
+        }
+
+        .GameTitle,
+        .GameFoot {
             display: inline-flex;
             width: 100%;
+        }
+
+        .GameBody {
+            position: relative;
+            height: 200px;
+            display:flex;
+        }
+
+        .GameBody table tr td {
+            width: 60px;
+        }
+
+        .checkerboard {
+            position: absolute;
+            margin: auto !important;
+        }
+        .checkerboardSVG {
+            position: absolute;
+            margin: auto !important;
         }
 
         #tbGameTitle {
@@ -21,11 +52,6 @@
 
         #tbGameTitle td {
             display: inline-flex;
-        }
-
-        #tbGameTitle td div {
-            width: 25px;
-            height: 25px;
         }
     </style>
 </head>
@@ -45,7 +71,7 @@
                     <table id="tbGameTitle">
                         <tr>
                             <td>You are:
-                                <div>
+                                <div class="pieces">
                                     <svg aria-label="X" role="img" viewBox="0 0 128 128">
                                         <path class="hFJ9Ve" d="M16,16L112,112"
                                             style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
@@ -57,7 +83,7 @@
                                 </div>
                             </td>
                             <td>Opponent:
-                                <div>
+                                <div class="pieces">
                                     <svg aria-label="O" role="img" viewBox="0 0 128 128">
                                         <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
                                             style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
@@ -69,30 +95,65 @@
                     </table>
                 </div>
                 <div style="display:inline-flex;">輪到
-                    <div></div>了
+                    <div class="pieces">
+                        <div v-if="pty.CurrentTurn==='X'">
+                            <svg aria-label="X" role="img" viewBox="0 0 128 128">
+                                <path class="hFJ9Ve" d="M16,16L112,112"
+                                    style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
+                                </path>
+                                <path class="hFJ9Ve" d="M112,16L16,112"
+                                    style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;stroke-width: 16px;">
+                                </path>
+                            </svg>
+                        </div>
+                        <div v-if="pty.CurrentTurn==='O'">
+                            <svg aria-label="O" role="img" viewBox="0 0 128 128">
+                                <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
+                                    style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>了
                 </div>
-                <div>
-                    <table>
-                        <tr v-for="row in RowCount">
-                            <td><svg aria-label="X" role="img" viewBox="0 0 128 128" >
-                                    <path class="hFJ9Ve" d="M16,16L112,112"
-                                        style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
-                                    </path>
-                                    <path class="hFJ9Ve" d="M112,16L16,112"
-                                        style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;stroke-width: 16px;">
-                                    </path>
-                                </svg>
-                                <svg aria-label="O" role="img" viewBox="0 0 128 128" style="display:none;">
-                                    <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
-                                        style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
-                                    </path>
-                                </svg>
+                <div class="GameBody">
+                    <svg jsname="hSNbuf" class="Vu40Fd XAM5jb checkerboardSVG" viewBox="0 0 215 215" style="width: 170px; opacity: 1;">
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M106.51736450195312,82.0694580078125L6.017364501953125,82.0694580078125"
+                            style="stroke-dasharray: 100.5; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M106.51736450195312,152.0694580078125L6.017364501953125,152.0694580078125"
+                            style="stroke-dasharray: 100.5; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M106.51736450195312,82.0694580078125L207.01736450195312,82.0694580078125"
+                            style="stroke-dasharray: 100.5; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M106.51736450195312,152.0694580078125L207.01736450195312,152.0694580078125"
+                            style="stroke-dasharray: 100.5; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M72.01736450195312,117.0694580078125L72.01736450195312,15.0694580078125"
+                            style="stroke-dasharray: 102; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M141.01736450195312,117.0694580078125L141.01736450195312,15.0694580078125"
+                            style="stroke-dasharray: 102; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M72.01736450195312,117.0694580078125L72.01736450195312,219.0694580078125"
+                            style="stroke-dasharray: 102; stroke-dashoffset: 0;"></path>
+                        <path jsname="V3UtZb" class="hFJ9Ve"
+                            d="M141.01736450195312,117.0694580078125L141.01736450195312,219.0694580078125"
+                            style="stroke-dasharray: 102; stroke-dashoffset: 0;"></path>
+                    </svg>
+                    <table class="checkerboard">
+                        <tr v-for="line in BoardLine">
+                            <td v-for="squareID in SquareArray(line)">
+                                <div class="pieces" v-bind="{id: squareID}" v-on:click="chooseit(squareID)">
+                                    <pieces-type :key="squareID" :squarecontent="GetSquareValue(squareID)">
+                                    </pieces-type>
+                                </div>
                             </td>
-                            <td></td>
-                            <td></td>
                         </tr>
                     </table>
                 </div>
+                <div class="GameFoot" @click="">重新開始遊戲</div>
             </div>
         </div>
     </div>
@@ -104,13 +165,63 @@
         data() {
             return {
                 pty: {
-                    dtArray: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+                    SquareIDList: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                    SquareValue: { 1: 'O', 2: '', 3: '', 4: '', 5: 'X', 6: '', 7: '', 8: '', 9: 'O' },
+                    SquareObj: [
+                        { index: 1, value: '' },
+                        { index: 2, value: '' },
+                        { index: 3, value: '' },
+                        { index: 4, value: '' },
+                        { index: 5, value: '' },
+                        { index: 6, value: '' },
+                        { index: 7, value: '' },
+                        { index: 8, value: '' },
+                        { index: 9, value: '' },
+                    ],
+                    CurrentTurn: 'X'
                 }
             }
         },
         computed: {
-            RowCount() { return this.pty.dtArray.length }
+            BoardLine() { return this.pty.SquareIDList.length },
+            SquareArray() { return idx => { return this.pty.SquareIDList[idx - 1] } },
+            GetSquareValue() { return idx => { return this.pty.SquareValue[idx] } }
+        },
+        methods: {
+            chooseit(psquareID) {
+                if (this.pty.SquareValue[psquareID]) return;
+                this.pty.SquareValue[psquareID] = this.pty.CurrentTurn;
+                this.changeTurn();
+            },
+            changeTurn() {
+                if (this.pty.CurrentTurn === 'X') { this.pty.CurrentTurn = 'O'; } else { this.pty.CurrentTurn = 'X'; }
+            },
+            resetGame() {
+                this.pty.CurrentTurn = 'X';
+                this.pty.CurrentTurn = 'X';
+
+            }
         }
+    }).component('pieces-type', {
+        props: ['squarecontent'],
+        template: `
+        <div v-show="squarecontent==='X'">
+            <svg aria-label="X" role="img" viewBox="0 0 128 128">
+                <path class="hFJ9Ve" d="M16,16L112,112"
+                    style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0; stroke-width: 16px;">
+                </path>
+                <path class="hFJ9Ve" d="M112,16L16,112"
+                    style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;stroke-width: 16px;">
+                </path>
+            </svg>
+        </div>
+        <div v-show="squarecontent==='O'">
+            <svg aria-label="O" role="img" viewBox="0 0 128 128">
+                <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
+                    style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;stroke-width: 16px; fill:none;">
+                </path>
+            </svg>
+        </div>`
     }).mount('#ttt')
 
 </script>
