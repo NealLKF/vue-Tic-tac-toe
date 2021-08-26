@@ -9,14 +9,15 @@
     <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="node_modules/vue/dist/vue.global.js" charset="utf-8"></script>
+    <script src="node_modules/sweetalert/dist/sweetalert.min.js" charset="utf-8"></script>
     <style>
         .pieces {
-            width: 80%;
-            height: 80%;
-            margin: 3px !important;
-            max-width: 33px;
-            min-width: 25px;
-            min-height: 25px;
+            /* width: 80%;
+            height: 80%; */
+            margin: 1px !important;
+            max-width: 35px;
+            min-width: 28px;
+            min-height: 28px;
         }
 
         .XAM5jb path {
@@ -30,18 +31,17 @@
             display: inline-flex;
             width: 100%;
         }
-        .GameFoot:hover{
+
+        .GameFoot:hover {
             font-weight: bold;
             cursor: pointer;
         }
 
         .checkerboard {
-            min-width: 35px;
-            min-height: 35px;
-            width: 100%;
-            height: 100%;
+            width: 99px;
+            height: 100px;
             position: absolute;
-            top: 3px;
+            top: 4px;
             right: 0px;
             bottom: 0px;
             left: 0px;
@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="col-lg-2 mx-auto" style="position: relative;max-width: 150px;min-width: 100px;">
+                    <div class="col-lg-2 mx-auto" style="position: relative; width: 100px;">
                         <svg jsname="hSNbuf" class="Vu40Fd XAM5jb" viewBox="0 0 215 215"
                             style="width: 100%; opacity: 1;">
                             <path jsname="V3UtZb" class="hFJ9Ve"
@@ -166,7 +166,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-lg-2 mx-auto" >
+                <div class="col-lg-2 mx-auto">
                     <div class="GameFoot" @click="resetGame()">重新開始遊戲</div>
                 </div>
             </div>
@@ -176,21 +176,33 @@
 
 </html>
 <script type="text/javascript">
+    Array.prototype.groupBy = function (prop, text) {
+        return this.reduce(function (groups, item) {
+            const val = item[prop]
+            if (val === text) {
+                groups[val] = groups[val] || []
+                groups[val].push(item)
+            }
+            return groups
+        }, {})
+    };
+
+    const WinArray = [[1, 2, 3], [1, 4, 7], [1, 5, 9],
+    [2, 5, 8], [3, 5, 7], [3, 6, 9], [4, 5, 6], [7, 8, 9]];
     const obj = Vue.createApp({
         data() {
             return {
                 pty: {
                     SquareIDList: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-                    SquareValue: { 1: 'O', 2: '', 3: '', 4: '', 5: 'X', 6: '', 7: '', 8: '', 9: 'O' },
                     SquareObj: [
-                        { index: 1, value: 'O' },
-                        { index: 2, value: '' },
+                        { index: 1, value: 'X' },
+                        { index: 2, value: 'X' },
                         { index: 3, value: '' },
-                        { index: 4, value: 'X' },
+                        { index: 4, value: '' },
                         { index: 5, value: '' },
                         { index: 6, value: '' },
                         { index: 7, value: 'O' },
-                        { index: 8, value: '' },
+                        { index: 8, value: 'O' },
                         { index: 9, value: '' },
                     ],
                     CurrentTurn: 'X'
@@ -200,24 +212,60 @@
         computed: {
             BoardLine() { return this.pty.SquareIDList.length },
             SquareArray() { return idx => { return this.pty.SquareIDList[idx - 1] } },
-            GetSquareValue() { return idx => { return this.pty.SquareValue[idx] } }
+            GetSquareValue() { return idx => { return this.pty.SquareObj[idx - 1].value } }
         },
         methods: {
             chooseit(psquareID) {
-                if (this.pty.SquareValue[psquareID]) return;
-                this.pty.SquareValue[psquareID] = this.pty.CurrentTurn;
+                if (this.pty.SquareObj[psquareID - 1].value) return;
+                this.pty.SquareObj[psquareID - 1].value = this.pty.CurrentTurn;
                 this.changeTurn();
             },
             changeTurn() {
                 if (this.pty.CurrentTurn === 'X') { this.pty.CurrentTurn = 'O'; } else { this.pty.CurrentTurn = 'X'; }
             },
             resetGame() {
-                console.log('X');
                 this.pty.CurrentTurn = 'X';
-                for(var i = 1; i <= 9; i++){
-                    this.pty.SquareValue[i] = '';
+                this.pty.SquareObj.forEach((item) => {
+                    item.value = '';
+                })
+            },
+            GetWinner() {
+                const Otype = this.pty.SquareObj.groupBy('value', 'O');
+                const Xtype = this.pty.SquareObj.groupBy('value', 'X');
+                if (Otype.O.length >= 3) {
+                    const wary = JSON.parse(JSON.stringify(WinArray));
+                    Otype.O.forEach((ov) => {
+                        wary.forEach((ary) => {
+                            if (ary.indexOf(ov.index) > -1) {
+                                ary.splice(ary.indexOf(ov.index), 1)
+                            }
+                        })
+                    })
+                    if (wary.findIndex(x => x.length == 0) > -1) return 'O';
                 }
-
+                if (Xtype.X.length >= 3) {
+                    const wary = JSON.parse(JSON.stringify(WinArray));
+                    Xtype.X.forEach((xv) => {
+                        wary.forEach((ary) => {
+                            if (ary.indexOf(xv.index) > -1) {
+                                ary.splice(ary.indexOf(xv.index), 1)
+                            }
+                        })
+                    })
+                    if (wary.findIndex(x => x.length == 0) > -1) return 'X';
+                }
+                return '';
+            }
+        },
+        watch: {
+            pty: {
+                handler() {
+                    if (this.pty.SquareObj.filter(item => item.value).length > 4) {
+                        const winner = this.GetWinner();
+                        if (winner) { swal(winner + ' is winner!', '', 'success'); this.resetGame(); }
+                    }
+                },
+                deep: true
             }
         }
     }).component('pieces-type', {
