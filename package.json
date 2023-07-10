@@ -1,5 +1,6 @@
 {
   "name": "vue-Tic-tac-toe",
+  "homepage": "https://neallkf.github.io/vue-Tic-tac-toe",
   "version": "1.0.0",
   "description": "Let's play tic-tac-toe game.",
   "main": "index.js",
@@ -15,7 +16,6 @@
   "bugs": {
     "url": "https://github.com/NealLKF/vue-Tic-tac-toe/issues"
   },
-  "homepage": "https://github.com/NealLKF/vue-Tic-tac-toe",
   "dependencies": {
     "@popperjs/core": "^2.9.3",
     "bootstrap": "^5.1.0",
